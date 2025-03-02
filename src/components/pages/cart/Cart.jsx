@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, Box, Typography, Card, CardContent } from "@mui/material";
 import { useContext } from "react";
 import { Link } from "react-router";
 import { CartContext } from "../../context/CartContext";
@@ -11,75 +11,111 @@ const Cart = () => {
     useContext(CartContext);
 
   let total = getTotalAmount();
+
   const resetCartWithAlert = () => {
     Swal.fire({
-      title: "Seguro quieres vaciar el carrito?",
+      title: "¿Seguro quieres vaciar el carrito?",
       showDenyButton: true,
-      showCancelButton: false,
-      confirmButtonText: "si, vaciar",
-      denyButtonText: `No, dejar como estaba`,
+      confirmButtonText: "Sí, vaciar",
+      denyButtonText: "No, dejar como estaba",
     }).then((result) => {
-      console.log(result);
       if (result.isConfirmed) {
         resetCart();
-        Swal.fire({
-          title: "Carrito vaciado con exito",
-          showDenyButton: false,
-          showCancelButton: false,
-          confirmButtonText: "Ok",
-          icon: "success",
-        });
+        Swal.fire("Carrito vaciado con éxito", "", "success");
       } else if (result.isDenied) {
-        // resetCart();
-        Swal.fire({
-          title: "El carrito queda como estaba",
-          showDenyButton: false,
-          showCancelButton: false,
-          confirmButtonText: "Ok",
-          icon: "info",
-        });
+        Swal.fire("El carrito queda como estaba", "", "info");
       }
     });
   };
 
+  if (cart.length === 0) {
+    toast.info("El carrito está vacío", { duration: 5000 });
+  }
+
   return (
-    <div>
-      {cart.map((elemento) => {
-        return (
-          <div
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        minHeight: "100vh",
+        padding: 2,
+        textAlign: "center",
+      }}
+    >
+      {cart.length > 0 ? (
+        cart.map((elemento) => (
+          <Card
             key={elemento.id}
-            style={{
-              margin: "10px",
-              width: "200px",
-              border: elemento.id === "2" ? "2px solid black" : "2px solid red",
-            }}
-            className={elemento.id === "2" ? "principal" : "secundario"}
+            sx={{ width: "90%", maxWidth: 400, marginBottom: 2, boxShadow: 3 }}
           >
-            <h2>{elemento.title}</h2>
-            <h2>Cantidad: {elemento.quantity}</h2>
-            <h2>Cantidad: {elemento.price}</h2>
-            <Button
-              variant="text"
-              onClick={() => {
-                removeById(elemento.id);
-                toast.warning("El producto fue eliminado");
-              }}
-            >
-              Eliminar
-            </Button>
-          </div>
-        );
-      })}
+            <CardContent>
+              <Typography variant="h6">{elemento.title}</Typography>
+              <Typography>Cantidad: {elemento.quantity}</Typography>
+              <Typography>Precio: ${elemento.price}</Typography>
+              <Button
+                variant="outlined"
+                color="error"
+                sx={{ marginTop: 1 }}
+                onClick={() => {
+                  removeById(elemento.id);
+                  toast.warning("El producto fue eliminado");
+                }}
+              >
+                Eliminar
+              </Button>
+            </CardContent>
+          </Card>
+        ))
+      ) : (
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: 3,
+            backgroundColor: "#D1F2D1", // Verde claro
+            borderRadius: "8px",
+            boxShadow: 3, // Sombra suave
+            width: "80%",
+            maxWidth: 400,
+          }}
+        >
+          <Typography variant="h6" sx={{ color: "#2D6A4F" }}>
+            El carrito está vacío
+          </Typography>
+        </Box>
+      )}
 
-      {cart.length > 0 && <h2>El total a pagar es {total}</h2>}
+      {cart.length > 0 && (
+        <Typography variant="h6" sx={{ marginBottom: 2 }}>
+          Total a pagar: ${total}
+        </Typography>
+      )}
 
-      <Button variant="outlined" onClick={resetCartWithAlert}>
-        Vaciar carrito
-      </Button>
-      <Button variant="contained">
-        <Link to="/checkout">finalizar compra</Link>
-      </Button>
-    </div>
+      {cart.length > 0 && (
+        <Button
+          variant="contained"
+          color="primary"
+          sx={{ marginBottom: 2 }}
+          onClick={resetCartWithAlert}
+        >
+          Vaciar carrito
+        </Button>
+      )}
+
+      {cart.length > 0 && (
+        <Button variant="contained" color="success">
+          <Link
+            to="/checkout"
+            style={{ color: "white", textDecoration: "none" }}
+          >
+            Finalizar compra
+          </Link>
+        </Button>
+      )}
+    </Box>
   );
 };
 

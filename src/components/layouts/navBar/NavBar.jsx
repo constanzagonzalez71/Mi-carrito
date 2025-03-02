@@ -13,18 +13,27 @@ import { useState } from "react";
 import CartWidget from "../../common/cartWidget/CartWidget";
 
 const Navbar = () => {
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorElProductos, setAnchorElProductos] = useState(null);
+  const [anchorElCursos, setAnchorElCursos] = useState(null);
 
-  const handleMenuClick = (event) => {
-    setAnchorEl(event.currentTarget);
+  const handleMenuClickProductos = (event) => {
+    setAnchorElProductos(event.currentTarget);
   };
 
-  const handleCloseMenu = () => {
-    setAnchorEl(null);
+  const handleCloseMenuProductos = () => {
+    setAnchorElProductos(null);
+  };
+
+  const handleMenuClickCursos = (event) => {
+    setAnchorElCursos(event.currentTarget);
+  };
+
+  const handleCloseMenuCursos = () => {
+    setAnchorElCursos(null);
   };
 
   return (
-    <AppBar position="sticky" sx={{ backgroundColor: "#28a745" }}>
+    <AppBar position="sticky" sx={{ backgroundColor: "#9DC08B" }}>
       <Toolbar
         sx={{
           display: "flex",
@@ -79,40 +88,54 @@ const Navbar = () => {
               marginRight: "20px",
               "&:hover": { backgroundColor: "#218838" },
             }}
-            onClick={handleMenuClick}
+            onClick={handleMenuClickProductos}
           >
             Productos
           </Button>
           <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleCloseMenu}
+            anchorEl={anchorElProductos}
+            open={Boolean(anchorElProductos)}
+            onClose={handleCloseMenuProductos}
           >
-            <MenuItem component={Link} to="/category/ropa-accesorios">
+            <MenuItem component={Link} to="/category/Ropa y Accesorios ">
               Ropa y accesorios para bebés
             </MenuItem>
-            <MenuItem component={Link} to="/category/amigurumis-fantasia">
+            <MenuItem component={Link} to="/category/Amigurumis Fantasia">
               Amigurumis fantasía
             </MenuItem>
-            <MenuItem component={Link} to="/category/amigurumis-animales">
+            <MenuItem component={Link} to="/category/Amigurumis Animales">
               Amigurumis animales
             </MenuItem>
-            <MenuItem component={Link} to="/category/ajuar-nacimiento">
+            <MenuItem component={Link} to="/category/Ajuar Nacimiento">
               Ajuar Nacimiento
             </MenuItem>
-            <MenuItem component={Link} to="/category/personajes-animacion">
-              Personajes de animación
+            <MenuItem component={Link} to="/category/Personajes de Animacion">
+              Personajes de Animación 
             </MenuItem>
           </Menu>
 
+          {/* Menú Cursos */}
           <Button
             variant="text"
-            sx={{ color: "white", "&:hover": { backgroundColor: "#218838" } }}
-            component={Link}
-            to="/cursos"
+            sx={{
+              color: "white",
+              marginRight: "20px",
+              "&:hover": { backgroundColor: "#218838" },
+            }}
+            onClick={handleMenuClickCursos}
           >
             Cursos
           </Button>
+          <Menu
+            anchorEl={anchorElCursos}
+            open={Boolean(anchorElCursos)}
+            onClose={handleCloseMenuCursos}
+          >
+            <MenuItem component={Link} to="/category/Curso de Amigurumis">
+              Curso de Iniciación
+            </MenuItem>
+            
+          </Menu>
         </Box>
 
         {/* Carrito de compras */}

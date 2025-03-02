@@ -6,9 +6,15 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 
 const Footer = () => {
   return (
-    <Box sx={{ backgroundColor:"#28a745" , color: "white", padding: "20px 0" }}>
+    <Box sx={{ backgroundColor: "#9DC08B", color: "white", padding: "20px 0" }}>
       <Container maxWidth="md">
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           {/* WhatsApp */}
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <IconButton

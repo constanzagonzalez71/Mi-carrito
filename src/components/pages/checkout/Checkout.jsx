@@ -29,6 +29,7 @@ const Checkout = () => {
     { label: "Amigurumis animales", value: "amigurumis_animales" },
     { label: "Ajuar Nacimiento", value: "ajuar_nacimiento" },
     { label: "Personajes de animación", value: "personajes_animacion" },
+    { label: "Cursos", value: "curso de amigurumi" },
   ];
 
   // Manejar cambios en los inputs
