@@ -1,15 +1,28 @@
 import { useState } from "react";
-import { Button, TextField, MenuItem, Select, InputLabel, FormControl, Container, Typography } from "@mui/material";
+import {
+  Button,
+  TextField,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
+  Container,
+  Typography,
+  Snackbar,
+  Alert,
+} from "@mui/material";
 
 const Checkout = () => {
   const [user, setUser] = useState({
     nombre: "",
     email: "",
     telefono: "",
-    categoria: "",  // Cambio de 'talle' a 'categoria'
+    categoria: "",
   });
 
-  // Array de categorías de productos
+  const [open, setOpen] = useState(false); // Estado para el Toast
+
+  // Categorías disponibles
   const arrayCategorias = [
     { label: "Ropa y accesorios para bebés", value: "ropa_bebes" },
     { label: "Amigurumis fantasía", value: "amigurumis_fantasia" },
@@ -18,17 +31,17 @@ const Checkout = () => {
     { label: "Personajes de animación", value: "personajes_animacion" },
   ];
 
-  // Manejar cambio en los campos de entrada
+  // Manejar cambios en los inputs
   const handleChange = (evento) => {
     const { value, name } = evento.target;
     setUser({ ...user, [name]: value });
   };
 
+  // Enviar el formulario
   const handleSubmit = (evento) => {
     evento.preventDefault();
     console.log(user);
-    // Aquí puedes agregar la lógica para enviar la orden al backend
-    alert("¡Gracias por tu compra!");
+    setOpen(true); // Mostrar el toast
   };
 
   return (
@@ -82,13 +95,41 @@ const Checkout = () => {
         </FormControl>
 
         {/* Botones de acción */}
-        <Button variant="contained" color="primary" type="submit" fullWidth sx={{ marginBottom: 2 }}>
+        <Button
+          variant="contained"
+          color="primary"
+          type="submit"
+          fullWidth
+          sx={{ marginBottom: 2 }}
+        >
           Comprar
         </Button>
-        <Button variant="outlined" fullWidth>
+        <Button
+          variant="outlined"
+          fullWidth
+          onClick={() =>
+            setUser({ nombre: "", email: "", telefono: "", categoria: "" })
+          }
+        >
           Cancelar
         </Button>
       </form>
+
+      {/* Snackbar (Toast) para mostrar "Compra Exitosa" */}
+      <Snackbar
+        open={open}
+        autoHideDuration={3000}
+        onClose={() => setOpen(false)}
+        anchorOrigin={{ vertical: "center", horizontal: "center" }} // Centrado
+      >
+        <Alert
+          onClose={() => setOpen(false)}
+          severity="success"
+          variant="filled"
+        >
+          ¡Compra exitosa!
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

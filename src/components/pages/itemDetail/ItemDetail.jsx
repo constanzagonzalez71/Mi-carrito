@@ -4,6 +4,7 @@ import { products } from "../../../products";
 import Counter from "../../common/counter/Counter";
 import { Card, CardMedia, CardContent, Typography, Box } from "@mui/material";
 
+
 export const ItemDetail = () => {
   const { id } = useParams();
   const [item, setItem] = useState({});

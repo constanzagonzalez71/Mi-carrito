@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 import { products } from "../../../products";
 import ProductCard from "../../common/productCard/ProductCard";
 import { useParams } from "react-router";
+import ProductSkeleton from "../../common/productSkeleton/ProductSkeleton";
+import { Box } from "@mui/material";
+
 
 const ItemListContainer = () => {
   const { name } = useParams();
-
   const [items, setItems] = useState([]);
 
   useEffect(() => {
@@ -18,7 +20,7 @@ const ItemListContainer = () => {
       if (permiso) {
         resolve(name ? arrayFiltrado : products);
       } else {
-        reject({ status: 400, message: "algo salio mal" });
+        reject({ status: 400, message: "algo salió mal" });
       }
     });
 
@@ -42,30 +44,39 @@ const ItemListContainer = () => {
       >
         Amigurumis By Coni
       </h1>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          flexWrap: "wrap",
-          gap: "20px",
-          marginTop: "16px",
-        }}
-      >
-        {items.map((item) => {
-          return (
-            <ProductCard
-              key={item.id}
-              price={item.price}
-              title={item.title}
-              stock={item.stock}
-              imageUrl={item.imageUrl}
-              id={item.id}
-              description={item.description}
-              category={item.category}
-            />
-          );
-        })}
-      </div>
+
+      {items.length === 0 ? (
+        <Box sx={{ display: "flex", justifyContent: "center", gap: "20px" }}>
+          <ProductSkeleton />
+          <ProductSkeleton />
+          <ProductSkeleton />
+        </Box>
+      ) : (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            flexWrap: "wrap",
+            gap: "20px",
+            marginTop: "16px",
+          }}
+        >
+          {items.map((item) => {
+            return (
+              <ProductCard
+                key={item.id}
+                price={item.price}
+                title={item.title}
+                stock={item.stock}
+                imageUrl={item.imageUrl}
+                id={item.id}
+                description={item.description}
+                category={item.category}
+              />
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };
