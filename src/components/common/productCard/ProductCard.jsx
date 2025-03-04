@@ -8,28 +8,28 @@ const ProductCard = ({ price, title, stock, imageUrl, id, category }) => {
   return (
     <div
       style={{
-        border: "2px solid #8fbc8f", // Borde verde suave
+        border: "2px solid #8fbc8f", 
         width: "300px",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         padding: "10px",
         textAlign: "center",
-        borderRadius: "8px", // Bordes redondeados
-        boxShadow: "0px 4px 12px rgba(143, 188, 143, 0.5)", // Sombra suave verde
-        transition: "transform 0.3s ease-in-out", // Efecto de transformación al pasar el mouse
+        borderRadius: "8px", 
+        boxShadow: "0px 4px 12px rgba(143, 188, 143, 0.5)", 
+        transition: "transform 0.3s ease-in-out", 
       }}
     >
       <img
-        src={imageUrlWithTransform} 
+        src={imageUrlWithTransform}
         alt={title}
         style={{
           width: "100%",
-          height: "200px",
+          height: "350px", 
           objectFit: "cover",
           borderBottom: "2px solid #8fbc8f",
-          borderTopLeftRadius: "8px", 
-          borderTopRightRadius: "8px", 
+          borderTopLeftRadius: "8px",
+          borderTopRightRadius: "8px",
         }}
       />
       <h2>{title}</h2>
@@ -37,7 +37,18 @@ const ProductCard = ({ price, title, stock, imageUrl, id, category }) => {
       <h2>Stock: {stock}</h2>
       <h2>{category}</h2>
       <Link to={`/itemDetail/${id}`}>
-        <Button variant="outlined" style={{ marginTop: "10px" }}>
+        <Button
+          variant="outlined"
+          sx={{
+            marginTop: "10px",
+            borderColor: "#A8D8A8", 
+            color: "#A8D8A8", 
+            "&:hover": {
+              backgroundColor: "#A8D8A8", 
+              color: "white", 
+            },
+          }}
+        >
           Ver detalle
         </Button>
       </Link>

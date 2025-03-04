@@ -1,17 +1,20 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { products } from "../../../products";
 import Counter from "../../common/counter/Counter";
 import { Card, CardMedia, CardContent, Typography, Box } from "@mui/material";
-
+import { db } from "../../../firebaseConfig";
+import { collection, doc, getDoc } from "firebase/firestore";
 
 export const ItemDetail = () => {
   const { id } = useParams();
   const [item, setItem] = useState({});
 
   useEffect(() => {
-    let producto = products.find((product) => product.id === id);
-    setItem(producto);
+    let productCollection = collection(db, "products");
+    let refDoc = doc(productCollection, id);
+    getDoc(refDoc).then((res) => {
+      setItem({ id: res.id, ...res.data() });
+    });
   }, [id]);
 
   return (
@@ -24,12 +27,22 @@ export const ItemDetail = () => {
       }}
     >
       {/* Título principal */}
-      <Typography variant="h4" sx={{ marginBottom: "20px", fontWeight: "bold" }}>
+      <Typography
+        variant="h4"
+        sx={{ marginBottom: "20px", fontWeight: "bold" }}
+      >
         Nuestros productos
       </Typography>
 
       {/* Tarjeta del producto */}
-      <Card sx={{ maxWidth: 500, width: "100%", padding: "10px", textAlign: "center" }}>
+      <Card
+        sx={{
+          maxWidth: 500,
+          width: "100%",
+          padding: "10px",
+          textAlign: "center",
+        }}
+      >
         <CardMedia
           component="img"
           image={item.imageUrl}

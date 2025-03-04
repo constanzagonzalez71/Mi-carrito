@@ -1,43 +1,39 @@
 import { useState, useEffect } from "react";
-import { products } from "../../../products";
-import ProductCard from "../../common/productCard/ProductCard";
 import { useParams } from "react-router";
+import ProductCard from "../../common/productCard/ProductCard";
 import ProductSkeleton from "../../common/productSkeleton/ProductSkeleton";
 import { Box } from "@mui/material";
+import { db } from "../../../firebaseConfig";
+import { getDocs, collection, query, where } from "firebase/firestore";
 
 const ItemListContainer = () => {
   const { name } = useParams();
   const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true); // Nuevo estado de carga
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true); // Activar la carga antes de iniciar la promesa
+    setLoading(true);
 
-    let arrayFiltrado = products.filter(
-      (elemento) => elemento.category === name
-    );
+    const coleccionDeProductos = collection(db, "products");
+    let consulta = coleccionDeProductos;
 
-    const getProducts = new Promise((resolve, reject) => {
-      let permiso = true;
-      setTimeout(() => {
-        // Simular un retraso en la carga
-        if (permiso) {
-          resolve(name ? arrayFiltrado : products);
-        } else {
-          reject({ status: 400, message: "algo salió mal" });
-        }
-      }, 2000); // Simulación de 2 segundos de carga
-    });
+    if (name) {
+      consulta = query(coleccionDeProductos, where("category", "==", name));
+    }
 
-    getProducts
+    getDocs(consulta)
       .then((res) => {
-        setItems(res);
+        const newArray = res.docs.map((elemento) => ({
+          id: elemento.id,
+          ...elemento.data(),
+        }));
+        setItems(newArray);
       })
       .catch((error) => {
-        console.log(error);
+        console.error("Error obteniendo productos:", error);
       })
       .finally(() => {
-        setLoading(false); // Desactivar la carga al finalizar
+        setLoading(false);
       });
   }, [name]);
 
@@ -69,20 +65,18 @@ const ItemListContainer = () => {
             marginTop: "16px",
           }}
         >
-          {items.map((item) => {
-            return (
-              <ProductCard
-                key={item.id}
-                price={item.price}
-                title={item.title}
-                stock={item.stock}
-                imageUrl={item.imageUrl}
-                id={item.id}
-                description={item.description}
-                category={item.category}
-              />
-            );
-          })}
+          {items.map((item) => (
+            <ProductCard
+              key={item.id}
+              price={item.price}
+              title={item.title}
+              stock={item.stock}
+              imageUrl={item.imageUrl}
+              id={item.id}
+              description={item.description}
+              category={item.category}
+            />
+          ))}
         </div>
       )}
     </div>
