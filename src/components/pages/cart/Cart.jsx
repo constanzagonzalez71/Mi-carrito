@@ -1,13 +1,12 @@
 import { Button, Box, Typography, Card, CardContent } from "@mui/material";
 import { useContext } from "react";
-import { Link } from "react-router";
+import { Link } from "react-router"; // Asegúrate de que uses 'react-router-dom' y no 'react-router'
 import { CartContext } from "../../context/CartContext";
-
 import Swal from "sweetalert2";
 import { toast } from "sonner";
 
 const Cart = () => {
-  const { resetCart, cart, removeById, getTotalAmount } =
+  const { resetCart, cart, removeFromCart, getTotalAmount } =
     useContext(CartContext);
 
   let total = getTotalAmount();
@@ -28,6 +27,11 @@ const Cart = () => {
     });
   };
 
+  const handleRemove = (id) => {
+    removeFromCart(id); // Llamamos la función para eliminar el producto
+    toast.warning("El producto fue eliminado");
+  };
+
   if (cart.length === 0) {
     toast.info("El carrito está vacío", { duration: 5000 });
   }
@@ -38,9 +42,11 @@ const Cart = () => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "center",
-        minHeight: "100vh",
-        padding: 2,
+        justifyContent: "flex-start", // Alineación desde la parte superior
+        minHeight: "500px", // Altura mínima de 500px
+        maxHeight: "100vh", // No exceder la altura de la pantalla
+        overflowY: "auto", // Permitir desplazamiento si el contenido es largo
+        padding: 2, // Agregar relleno
         textAlign: "center",
       }}
     >
@@ -48,7 +54,12 @@ const Cart = () => {
         cart.map((elemento) => (
           <Card
             key={elemento.id}
-            sx={{ width: "90%", maxWidth: 400, marginBottom: 2, boxShadow: 3 }}
+            sx={{
+              width: "90%",
+              maxWidth: 400,
+              marginBottom: 2,
+              boxShadow: 3,
+            }}
           >
             <CardContent>
               <Typography variant="h6">{elemento.title}</Typography>
@@ -56,12 +67,9 @@ const Cart = () => {
               <Typography>Precio: ${elemento.price}</Typography>
               <Button
                 variant="outlined"
-                color="error"
+                color="success"
                 sx={{ marginTop: 1 }}
-                onClick={() => {
-                  removeById(elemento.id);
-                  toast.warning("El producto fue eliminado");
-                }}
+                onClick={() => handleRemove(elemento.id)} // Elimina el producto
               >
                 Eliminar
               </Button>
