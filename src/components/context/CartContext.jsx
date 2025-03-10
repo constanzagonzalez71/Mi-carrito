@@ -52,7 +52,7 @@ const CartContextProvider = ({ children }) => {
   const contextValue = {
     cart,
     addToCart,
-    removeFromCart, // Asegúrate de que esta función se usa correctamente
+    removeFromCart, 
     resetCart,
     getTotalQuantity,
     getTotalAmount,
